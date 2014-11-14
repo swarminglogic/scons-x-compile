@@ -1,0 +1,7 @@
+.gitignore
+.sconsign.dblite
+.#*
+*.pyc
+bin/
+build/
+lib/
