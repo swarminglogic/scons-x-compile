@@ -1,5 +1,3 @@
-import os
-
 targetSuffix = ''
 
 base ='#/src'
@@ -10,6 +8,6 @@ libpaths = ['#/lib/']
 
 cppflags = []
 
-linkflags = []
-
 sourcepaths = [base]
+
+linkflags = []
