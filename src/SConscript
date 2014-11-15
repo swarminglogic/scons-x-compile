@@ -20,5 +20,5 @@ app = env.Program(target, cppFiles,
                   CPPPATH   = c.sourcepaths,
                   CPPFLAGS  = c.cppflags,
                   LINKFLAGS = c.linkflags,
-                  LIBS      = c.libOther)
+                  LIBS      = c.libs)
 Default(app)

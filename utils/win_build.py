@@ -1,14 +1,28 @@
+
+#  General setup
+##############################
+cross_prefix = "/usr/local/cross-tools/x86_64-w64-mingw32"
+sdl_libs = ['mingw32', 'SDL2main', 'SDL2']
+other_libs = ['m', 'dinput8', 'dxguid', 'dxerr8', 'user32',
+              'gdi32', 'winmm', 'imm32', 'ole32', 'oleaut32',
+              'shell32', 'version', 'uuid']
+
+
+#  Required output variables
+##############################
 targetSuffix = '.exe'
 
 base ='#/src'
 
-libOther = ['m']
+libs = sdl_libs + other_libs
 
-libpaths = ['#/lib/']
+libpaths = ['#/lib/',
+            cross_prefix + '/lib']
 
-cppflags = []
+cppflags = ['-Dmain=SDL_main']
 
-sourcepaths = [base]
+sourcepaths = [base,
+               cross_prefix + '/include']
 
 linkflags = ['--static',
              '-Wl,--no-undefined',

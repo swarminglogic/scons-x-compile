@@ -1,13 +1,25 @@
+import subprocess
+
+#  General setup
+##############################
+sdl_prefix = subprocess.check_output(["sdl2-config", "--prefix"]).strip()
+sdl_libs = ['SDL2', 'pthread']
+other_libs = ['m', 'dl', 'rt']
+
+#  Required output variables
+##############################
 targetSuffix = ''
 
 base ='#/src'
 
-libOther = ['m', 'dl', 'rt']
+libs = sdl_libs + other_libs
 
-libpaths = ['#/lib/']
+libpaths = ['#/lib/',
+            sdl_prefix + '/lib']
 
-cppflags = []
+cppflags = ['-D_REENTRANT']
 
-sourcepaths = [base]
+sourcepaths = [base,
+               sdl_prefix + '/include']
 
 linkflags = []
