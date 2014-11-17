@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 
 void logSDLVersion(std::ostream &out,
@@ -31,7 +32,6 @@ int main(int argc, char *argv[])
 
   if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
     std::cout << "Failed to initialize SDL" << SDL_GetError() << std::endl;
-
   std::cout << "Hello SDL!" << std::endl;
 
   // Display SDL version information
@@ -40,6 +40,17 @@ int main(int argc, char *argv[])
   SDL_VERSION(&compiled);
   SDL_GetVersion(&linked);
   logSDLVersion(std::cout, "SDL", compiled, linked, SDL_GetRevision());
+
+  // Initialize SDL_image and display version information
+  int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
+  int imgFlagsInit = IMG_Init(imgFlags);
+  if ((imgFlagsInit & imgFlags) != imgFlags)
+    std::cout << "Failed to initialize SDL_image:"
+              << IMG_GetError() << std::endl;
+  std::cout << "Hello SDL_image!" << std::endl;
+  SDL_IMAGE_VERSION(&compiled);
+  logSDLVersion(std::cout, "SDL_image", compiled, *IMG_Linked_Version(), "");
+
 
   // Create a window and renderer using SDL
   SDL_Window* window = SDL_CreateWindow("SDL Window",

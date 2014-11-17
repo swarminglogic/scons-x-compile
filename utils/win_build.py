@@ -2,8 +2,10 @@
 #  General setup
 ##############################
 cross_prefix = "/usr/local/cross-tools/x86_64-w64-mingw32"
-sdl_libs = ['mingw32', 'SDL2main', 'SDL2']
-other_libs = ['m', 'dinput8', 'dxguid', 'dxerr8', 'user32',
+sdl_libs = ['mingw32', 'SDL2main', 'SDL2', 'SDL2_image']
+ # jpeg, png, and z, are required by SDL_image
+other_libs = ['jpeg', 'png', 'z',
+              'm', 'dinput8', 'dxguid', 'dxerr8', 'user32',
               'gdi32', 'winmm', 'imm32', 'ole32', 'oleaut32',
               'shell32', 'version', 'uuid']
 
