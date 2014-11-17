@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 
 
 void logSDLVersion(std::ostream &out,
@@ -25,6 +26,30 @@ void logSDLVersion(std::ostream &out,
       << std::endl;
 }
 
+
+void logSDLMixerMediaInfo(std::ostream& out)
+{
+  // Write music decoder information
+  const int nMusicDecoders = Mix_GetNumMusicDecoders();
+  out << "Music decoders (" << nMusicDecoders << "): ";
+  if (nMusicDecoders > 0)
+    out << Mix_GetMusicDecoder(0);
+  for (int i = 1 ; i < nMusicDecoders ; ++i)
+    out << ", " << Mix_GetMusicDecoder(i);
+  out << std::endl;
+
+  // Write audio decoder information
+  const int nChunkDecoders =  Mix_GetNumChunkDecoders();
+  out << "Audio decoders (" << nChunkDecoders << "): ";
+  if (nChunkDecoders > 0)
+    out << Mix_GetChunkDecoder(0);
+  for (int i = 1 ; i < nChunkDecoders ; ++i) {
+    out << ", " << Mix_GetChunkDecoder(i);
+  }
+  out << std::endl;
+}
+
+
 int main(int argc, char *argv[])
 {
   (void) argc;
@@ -41,6 +66,7 @@ int main(int argc, char *argv[])
   SDL_GetVersion(&linked);
   logSDLVersion(std::cout, "SDL", compiled, linked, SDL_GetRevision());
 
+
   // Initialize SDL_image and display version information
   int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
   int imgFlagsInit = IMG_Init(imgFlags);
@@ -51,6 +77,23 @@ int main(int argc, char *argv[])
   SDL_IMAGE_VERSION(&compiled);
   logSDLVersion(std::cout, "SDL_image", compiled, *IMG_Linked_Version(), "");
 
+
+  // Initialize SDL_mixer and display version information
+  int mixFlags = MIX_INIT_OGG;
+  int mixFlagsInit = Mix_Init(mixFlags);
+  if ((mixFlagsInit & mixFlags) != mixFlags) {
+    std::cout << "Failed to initialize SDL_mixer"
+              << Mix_GetError() << std::endl;
+  }
+  if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+    std::cout << "Failed to acquire sound device"
+              << Mix_GetError() << std::endl;
+  }
+  std::cout << "Hello SDL_mixer!" << std::endl;
+  // Write version information to log
+  SDL_MIXER_VERSION(&compiled);
+  logSDLVersion(std::cout, "SDL_mixer", compiled, *Mix_Linked_Version(), "");
+  logSDLMixerMediaInfo(std::cout);
 
   // Create a window and renderer using SDL
   SDL_Window* window = SDL_CreateWindow("SDL Window",
@@ -80,6 +123,12 @@ int main(int argc, char *argv[])
   // Cleanup
   SDL_DestroyWindow(window);
   SDL_DestroyRenderer(renderer);
+  IMG_Quit();
+  const int nOpenAudio = Mix_QuerySpec(nullptr, nullptr, nullptr);
+  for (int i = 0 ; i < nOpenAudio ; ++i)
+    Mix_CloseAudio();
+  while (Mix_Init(0))
+    Mix_Quit();
   SDL_Quit();
   return 0;
 }
