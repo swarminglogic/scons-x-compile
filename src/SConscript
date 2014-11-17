@@ -10,7 +10,7 @@ else:
 c.cppflags.extend(['-O0', '-g','-std=c++11'])
 c.cppflags.extend(['-Wall', '-Wextra'])
 
-target   = '#/bin/Hello_SDL_mixer' + c.targetSuffix
+target   = '#/bin/Hello_SDL_ttf' + c.targetSuffix
 cppFiles = [Glob('main.cpp') +
             Glob('*/*.cpp') +
             Glob('*/*/*.cpp')]

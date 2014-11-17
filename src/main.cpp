@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
 
 void logSDLVersion(std::ostream &out,
@@ -90,10 +91,19 @@ int main(int argc, char *argv[])
               << Mix_GetError() << std::endl;
   }
   std::cout << "Hello SDL_mixer!" << std::endl;
-  // Write version information to log
   SDL_MIXER_VERSION(&compiled);
   logSDLVersion(std::cout, "SDL_mixer", compiled, *Mix_Linked_Version(), "");
   logSDLMixerMediaInfo(std::cout);
+
+
+  // Initialize SDL_mixer and display version information
+  if (TTF_Init() != 0)
+    std::cout << "Failed to initialize SDL_ttf:"
+              << SDL_GetError() << std::endl;
+  std::cout << "Hello SDL_ttf!" << std::endl;
+  SDL_TTF_VERSION(&compiled);
+  logSDLVersion(std::cout, "SDL_ttf", compiled, *TTF_Linked_Version(), "");
+
 
   // Create a window and renderer using SDL
   SDL_Window* window = SDL_CreateWindow("SDL Window",
@@ -129,6 +139,7 @@ int main(int argc, char *argv[])
     Mix_CloseAudio();
   while (Mix_Init(0))
     Mix_Quit();
+  TTF_Quit();
   SDL_Quit();
   return 0;
 }
