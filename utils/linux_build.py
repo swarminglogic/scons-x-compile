@@ -3,7 +3,9 @@ import subprocess
 #  General setup
 ##############################
 sdl_prefix = subprocess.check_output(["sdl2-config", "--prefix"]).strip()
-sdl_libs = ['SDL2', 'SDL2_image', 'SDL2_mixer', 'SDL2_ttf', 'pthread']
+sdl_libs = ['GLEW', 'GL', 'GLU',
+            'SDL2', 'SDL2_image',
+            'SDL2_mixer', 'SDL2_ttf', 'pthread']
 other_libs = ['m', 'dl', 'rt']
 
 #  Required output variables
