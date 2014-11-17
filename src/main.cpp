@@ -10,9 +10,9 @@ void logSDLVersion(std::ostream &out,
                    std::string revision)
 {
   out << what << " Version (Compiled): "
-     << static_cast<int>(compiled.major) << "."
-     << static_cast<int>(compiled.minor) << "."
-     << static_cast<int>(compiled.patch);
+      << static_cast<int>(compiled.major) << "."
+      << static_cast<int>(compiled.minor) << "."
+      << static_cast<int>(compiled.patch);
   if (!revision.empty())
     out << " (" << revision << ")";
   out << std::endl;
@@ -40,5 +40,35 @@ int main(int argc, char *argv[])
   SDL_VERSION(&compiled);
   SDL_GetVersion(&linked);
   logSDLVersion(std::cout, "SDL", compiled, linked, SDL_GetRevision());
+
+  // Create a window and renderer using SDL
+  SDL_Window* window = SDL_CreateWindow("SDL Window",
+                                        SDL_WINDOWPOS_UNDEFINED,
+                                        SDL_WINDOWPOS_UNDEFINED,
+                                        240, 120,
+                                        SDL_WINDOW_SHOWN);
+  SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
+  SDL_SetRenderDrawColor(renderer, 20, 40, 60, 255);
+  SDL_RenderClear(renderer);
+  SDL_RenderPresent(renderer);
+
+  // Wait for user event before closing
+  bool isRunning = true;
+  SDL_Event event;
+  while (isRunning) {
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_KEYDOWN &&
+          event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+        isRunning = false;
+      else if (event.type == SDL_QUIT)
+        isRunning = false;
+    }
+    SDL_Delay(30);
+  }
+
+  // Cleanup
+  SDL_DestroyWindow(window);
+  SDL_DestroyRenderer(renderer);
+  SDL_Quit();
   return 0;
 }
