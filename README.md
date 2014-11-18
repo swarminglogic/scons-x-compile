@@ -39,6 +39,40 @@ sudo apt-get install scons
 | `hello-opengl`      | ` -"- ` + `GLEW`       | `Hello_OpenGL`      |
 
 
+## Cross-compiling libraries using helper script
+
+| Library             | `crosscompile_libs.sh` arguments        |
+| :-----------------  | :--------------------------------       |
+| `zlib`              | --x-comp-zlib                           |
+| `libpng`            | --x-comp-libpng                         |
+| `libjpeg`           | --x-comp-libjpeg                        |
+| `libogg`            | --x-comp-libogg                         |
+| `libvorbis`         | --x-comp-libvorbis                      |
+| `libfreetype`       | --x-comp-libfreetype                    |
+| `glew`              | --x-comp-glew                           |
+| `SDL2`              | --x-comp-sdl  [SDL2_SRC_DIR]            |
+| `SDL2_image`        | --x-comp-sdl-image [SDL2_IMAGE_SRC_DIR] |
+| `SDL2_mixer`        | --x-comp-sdl-mixer [SDL2_MIXER_SRC_DIR] |
+| `SDL2_ttf`          | --x-comp-sdl-ttf" [SDL2_TTF_SRC_DIR]    |
+
+Example `libogg` compile:
+```bash
+./crosscompile_libs.sh --x-comp-libogg
+```
+
+Example `SDL2` compile:
+```bash
+./crosscompile_libs.sh --x-comp-sdl /opt/sdl2/SDL
+```
+
+If environment variables `SDL2_SRC_DIR`, `SDL2_IMAGE_SRC_DIR`, `SDL2_MIXER_SRC_DIR`, and
+`SDL2_TTF_SRC_DIR` are set, you can cross-compile all libraries, including prerequisites with
+```bash
+./crosscompile_libs.sh --x-comp-all
+```
+
+
+
 ## Cross-compile `zlib` (prereq)
 ```bash
 # We do this in /tmp
