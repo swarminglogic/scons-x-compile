@@ -195,8 +195,7 @@ function x-compile-sdl-any {
 
 while test $# -gt 0; do
     case "$1" in
-        --help|-h|--list-targets)
-            shift
+       --list-targets)
             echo "--x-comp-zlib
 --x-comp-libpng
 --x-comp-libjpeg
@@ -208,6 +207,7 @@ while test $# -gt 0; do
 --x-comp-sdl-image
 --x-comp-sdl-mixer
 --x-comp-sdl-ttf"
+            exit
             ;;
         --x-comp-zlib)
             (x-compile-zlib)
@@ -242,25 +242,32 @@ while test $# -gt 0; do
             ;;
         --x-comp-sdl)
             shift
-            (x-compile-sdl-any "SDL" $1 "src/SDL.c")
+            (x-compile-sdl-any "SDL" "$SDL2_SRC_DIR" "src/SDL.c")
             exit
             ;;
         --x-comp-sdl-image)
             shift
             require_xor_abort libpng.a libjpeg.a libz.a libSDL2.a
-            (x-compile-sdl-any "SDL_image" $1 "IMG.c" --disable-webp)
+            (x-compile-sdl-any "SDL_image" "$SDL2_IMAGE_SRC_DIR" "IMG.c" --disable-webp)
             exit
             ;;
         --x-comp-sdl-mixer)
             shift
             require_xor_abort libvorbis.a libogg.a
-            (x-compile-sdl-any "SDL_mixer" $1 "mixer.c" --disable-music-mp3-smpeg)
+            (x-compile-sdl-any "SDL_mixer" "$SDL2_MIXER_SRC_DIR" "mixer.c" --disable-music-mp3-smpeg)
             exit
             ;;
         --x-comp-sdl-ttf)
             shift
             require_xor_abort libfreetype.a
-            (x-compile-sdl-any "SDL_ttf" $1 "SDL_ttf.c")
+            (x-compile-sdl-any "SDL_ttf" "$SDL2_TTF_SRC_DIR" "SDL_ttf.c")
+            exit
+            ;;
+        --x-comp-sdl-all)
+            $0 --x-comp-sdl
+            $0 --x-comp-sdl-image
+            $0 --x-comp-sdl-mixer
+            $0 --x-comp-sdl-ttf
             exit
             ;;
         --x-comp-all)
@@ -271,10 +278,7 @@ while test $# -gt 0; do
             $0 --x-comp-libvorbis
             $0 --x-comp-freetype
             $0 --x-comp-glew
-            if [ -d $SDL2_SRC_DIR ] ;       then $0 --x-comp-sdl $SDL2_SRC_DIR ; fi
-            if [ -d $SDL2_IMAGE_SRC_DIR ] ; then $0 --x-comp-sdl-image $SDL2_IMAGE_SRC_DIR ; fi
-            if [ -d $SDL2_MIXER_SRC_DIR ] ; then $0 --x-comp-sdl-mixer $SDL2_MIXER_SRC_DIR ; fi
-            if [ -d $SDL2_TTF_SRC_DIR ] ;   then $0 --x-comp-sdl-ttf $SDL2_TTF_SRC_DIR ; fi
+            $0 --x-comp-sdl-all
             exit
             ;;
         *)
