@@ -1,7 +1,7 @@
-scons-crosscompile-initial-project
+scons-x-compile
 ==================================
 
-Cross-Compilation (windows/linux) initial SCons build project.
+Cross-Compilation (windows/linux) `SCons` build helper.
 
 Serves as examples in an article on cross-compiling an SDL project for windows, from linux.
 
